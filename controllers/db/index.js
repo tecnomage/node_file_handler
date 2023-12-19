@@ -9,34 +9,33 @@ const upload = multer({ dest: 'uploads/' });
 
 const fileEndPoints = (app) => {
   app.get("/allfiles", (req, res) => {
-    db.all("SELECT * FROM items", [], (err, rows) => {
+    db.all("SELECT * FROM files f", [], (err, rows) => {
       if (err) {
         throw err;
       }
+      console.log(rows);
       res.json(rows);
     });
   });
 
-  app.post('/sendFiles', upload.single('file'), (req, res) => {
-    const file = req.body;
-    console.log(file);  
-    res.json({ id: 1 });
+  app.post('/sendfiles', upload.single('file'), (req, res) => {
+    const file = req.file;
+    
+    const filePath = path.join(__dirname, '..', 'uploads', file.filename);
 
-    // Move the file to a new location
-    // const newLocation = path.join(__dirname, 'saved_files', file.originalname);
-    // fs.rename(file.path, newLocation, (err) => {
-    //   if (err) {
-    //     console.error(err);
-    //     res.status(500).send('Error processing file');
-    //     return;
-    //   }
-    //   db.run('INSERT INTO files(file_path) VALUES(?)', [newLocation], function(err) {
-    //     if (err) {
-    //       return console.log(err.message);
-    //     }
-    //     res.json({ id: this.lastID, file_path: newLocation });
-    //   });
-    // });
+    db.run(
+      "INSERT INTO files (file_path) VALUES (?)",
+      [filePath],
+      (err) => {
+        if (err) {
+          console.log("Error inserting file path", err);
+          res.status(500).json({ error: "Failed to insert file path" });
+        } else {
+          console.log("File path inserted");
+          res.json("File path inserted");
+        }
+      }
+    );
   });
 
 
