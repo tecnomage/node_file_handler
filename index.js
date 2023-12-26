@@ -3,15 +3,14 @@
  * @module index
  */
 
-'use strict'
+"use strict";
 
-const express = require('express')
-const { setupEndpoints } = require('./controllers/files.js');
-const { fileEndPoints } = require('./controllers/db/index.js');
-
+const express = require("express");
+const { setupEndpoints } = require("./controllers/files.js");
+const { fileEndPoints } = require("./controllers/db/index.js");
 
 // Create the express app
-const app = express()
+const app = express();
 app.use(express.json());
 /**
  * Sets up the endpoints for handling file operations.
@@ -24,7 +23,6 @@ app.use(express.json());
 setupEndpoints(app);
 fileEndPoints(app);
 
-
 /**
  * Handles the 404 error.
  * @function
@@ -34,9 +32,9 @@ fileEndPoints(app);
  * @param {Object} res - The response object.
  * @returns {void}
  */
-app.use(function fourOhFourHandler (req, res) {
-  res.status(404).send()
-})
+app.use(function fourOhFourHandler(req, res) {
+  res.status(404).send();
+});
 
 /**
  * Handles the 500 error.
@@ -49,10 +47,10 @@ app.use(function fourOhFourHandler (req, res) {
  * @param {Function} next - The next middleware function.
  * @returns {void}
  */
-app.use(function fiveHundredHandler (err, req, res, next) {
-  console.error(err)
-  res.status(500).send()
-})
+app.use(function fiveHundredHandler(err, req, res, next) {
+  console.error(err);
+  res.status(500).send();
+});
 
 /**
  * Starts the server on the specified port.
@@ -64,12 +62,12 @@ app.use(function fiveHundredHandler (err, req, res, next) {
  */
 function startServer(port) {
   app.listen(port, function (err) {
-    if (err) {
-      return console.error(err)
+    if (err) {npm
+      return console.error(err);
     }
 
-    console.log(`Started at http://localhost:${port}`)
-  })
+    console.log(`Started at http://localhost:${port}`);
+  });
 }
 
 startServer(1234);
